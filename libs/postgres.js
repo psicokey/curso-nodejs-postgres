@@ -13,4 +13,4 @@ await client.connect();
 return client;
 } 
 
-module.exports = getConnection
+module.exports = getConnection;
