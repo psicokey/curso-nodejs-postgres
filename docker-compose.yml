@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:13
+    container_name: key
+    environment:
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_USER: key
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mail.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
