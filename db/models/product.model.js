@@ -1,5 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
-
+const { CATEGORY_TABLE } = require('./category.model');
 const PRODUCT_TABLE = 'products'; // Nombre de la tabla en la base de datos
 
 const ProductSchema = {
@@ -12,7 +12,7 @@ const ProductSchema = {
   name: {
     allowNull: false,
     type: DataTypes.STRING,
-    unique: true, // El nombre del producto podría ser único
+    unique: false, // El nombre del producto podría ser único
   },
   description: {
     allowNull: true, // Puede ser nulo si es una descripción corta o no necesaria al inicio
@@ -38,7 +38,7 @@ const ProductSchema = {
     field: 'category_id', // Nombre de la columna en la DB
     // Referencia a otra tabla (si tienes una tabla de categorías)
     // references: {
-    //   model: 'categories', // Nombre de la tabla de categorías
+    model: CATEGORY_TABLE, // Nombre de la tabla de categorías
     //   key: 'id',
     // },
     // onDelete: 'SET NULL', // Qué hacer si la categoría es eliminada (SET NULL, CASCADE, RESTRICT)
@@ -64,10 +64,10 @@ const ProductSchema = {
 };
 
 class Product extends Model {
-  static associate() {
+  static associate(models) {
     // Definir asociaciones aquí (ej: Product.belongsTo(models.Category))
     // Si tienes un modelo Category, descomenta y usa esta asociación:
-    // this.belongsTo(models.Category, { as: 'category', foreignKey: 'category_id' });
+     this.belongsTo(models.Category, { as: 'category', foreignKey: 'category_id' });
   }
 
   static config(sequelize) {
