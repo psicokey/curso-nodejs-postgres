@@ -8,11 +8,6 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
     await queryInterface.removeColumn(USER_TABLE, 'role');
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+
   }
 };

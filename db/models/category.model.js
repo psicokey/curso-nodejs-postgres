@@ -32,7 +32,7 @@ class Category extends Model {
     this.hasMany(models.Product, {
         as: 'products',
         foreignKey: 'categoryId'
-    })
+    });
   }
 
   static config(sequelize) {
@@ -40,7 +40,8 @@ class Category extends Model {
       sequelize,
       tableName: CATEGORY_TABLE,
       modelName: 'Category',
-      timestamps: false
+      timestamps: false,
+
     }
   }
 }

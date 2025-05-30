@@ -75,7 +75,8 @@ class Product extends Model {
       sequelize,
       tableName: PRODUCT_TABLE,
       modelName: 'Product',
-      timestamps: false, // O true si prefieres que Sequelize maneje createdAt y updatedAt automáticamente
+      timestamps: false,
+       // O true si prefieres que Sequelize maneje createdAt y updatedAt automáticamente
                         // Si pones true, no necesitas `field: 'create_at'` y `field: 'update_at'`
                         // Sequelize buscaría `createdAt` y `updatedAt` por defecto
                         // Pero si quieres snake_case (create_at, update_at), entonces 'timestamps: true' y 'underscored: true'
