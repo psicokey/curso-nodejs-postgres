@@ -28,46 +28,45 @@ class ProductsService {
     return newProduct;
   }
 
- async find() {
-  const products = await models.Product.findAll({
-    include: ['category']
-  });
+ async find(query) {
+  const options ={
+    include: ['category'],
+  }
+  const {limit, offset} = query;
+  if (limit && offset) {
+    options.limit = limit;
+    options.offset = offset;
+  }
+  const products = await models.Product.findAll(options);
     return products;
   }
 
   async findOne(id) {
-    const product = this.products.find(item => item.id === id);
+    const product = await models.Product.findByPk(id, {
+      include: ['category'] // Incluye la categoría asociada si la tienes
+    });
     if (!product) {
       throw boom.notFound('product not found');
     }
     if (product.isBlock) {
       throw boom.conflict('product is block');
     }
+
     return product;
   }
 
   async update(id, changes) {
-    const index = this.products.findIndex(item => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('product not found');
-    }
-    const product = this.products[index];
-    this.products[index] = {
-      ...product,
-      ...changes
-    };
-    return this.products[index];
+    const product = await this.findOne(id); // Reutiliza findOne para obtener el producto de la DB
+    const rta = await product.update(changes);
+    return rta;
   }
 
   async delete(id) {
-    const index = this.products.findIndex(item => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('product not found');
-    }
-    this.products.splice(index, 1);
-    return { id };
+    const product = await this.findOne(id); // Reutiliza findOne
+    await product.destroy();
+    return { id, message: 'Product deleted successfully' };
   }
-
 }
+
 
 module.exports = ProductsService;

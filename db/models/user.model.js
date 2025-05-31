@@ -45,10 +45,17 @@ class User extends Model {
       tableName: USER_TABLE,
       modelName: 'User',
       timestamps: false,
+      underscored: true,
       
     }
   }
+  toJSON() {
+    console.log('toJSON() del modelo User se está ejecutando.'); // <-- ¡Añade esto!
+    const values = { ...this.get() };
+    delete values.password;
+    console.log('Valores después de eliminar password:', values); // <-- ¡Y esto!
+    return values;
 }
-
+}
 
 module.exports = { USER_TABLE, UserSchema, User }

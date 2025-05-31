@@ -7,17 +7,29 @@ class CustomerService {
 
   async find() {
     const rta = await models.Customer.findAll({
-      include: ['user']
+      include: [
+        {
+          association: 'user', 
+          attributes: { exclude: ['password'] } // <--- Exclude password from the User model here!
+        }
+      ],
+
     });
     return rta;
   }
-
-  async findOne(id) {
-    const user = await models.Customer.findByPk(id);
-    if (!user) {
+ async findOne(id) {
+    const customer = await models.Customer.findByPk(id, {
+      include: [
+        {
+          association: 'user',
+          attributes: { exclude: ['password'] }
+        }
+      ]
+    });
+    if (!customer) { // Changed 'user' to 'customer' for clarity
       throw boom.notFound('customer not found');
     }
-    return user;
+    return customer;
   }
 
   async create(data) {

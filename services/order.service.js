@@ -44,17 +44,21 @@ class OrderService {
   }
 
   async find() {
-    // Incluir cliente y los ítems de la orden (productos a través de OrderProduct)
     const rta = await models.Order.findAll({
       include: [
         {
           association: 'customer',
-          include: ['user'] // Si también quieres el usuario del cliente
+          include: [
+            {
+              association: 'user',
+              attributes: { exclude: ['password'] } // <-- Añade esto de vuelta aquí
+            }
+          ]
         },
         {
-          association: 'items', // Nombre del alias en el modelo Order (as: 'items')
+          association: 'items',
           through: {
-            attributes: ['amount', 'price'], // Qué columnas traer de la tabla intermedia
+            attributes: ['amount', 'price'],
           },
         }
       ],
@@ -67,7 +71,12 @@ class OrderService {
       include: [
         {
           association: 'customer',
-          include: ['user']
+          include: [
+            {
+              association: 'user',
+              attributes: { exclude: ['password'] } // <-- Añade esto de vuelta aquí
+            },
+          ],
         },
         {
           association: 'items',

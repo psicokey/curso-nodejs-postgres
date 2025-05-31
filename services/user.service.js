@@ -10,9 +10,15 @@ class UserService {
     return newUser;
   }
 
-  async find() {
-    const rta = await models.User.findAll({
-      include: ['customer']
+   async find() {
+    const rta = await models.Customer.findAll({
+      include: [
+        {
+          association: 'user', // This is the 'user' association
+          attributes: { exclude: ['password'] } // <--- Exclude password from the User model here!
+        }
+      ],
+      // No 'exclude' directly on Customer for password
     });
     return rta;
   }
